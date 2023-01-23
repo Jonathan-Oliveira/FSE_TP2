@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 
 
 class PWMController:
-    def __init__(self, resistor_pin=23, fan_pin=24, frequency=999):
+    def __init__(self, resistor_pin=23, fan_pin=24, frequency=1001):
         self.resistor_pin = resistor_pin
         self.fan_pin = fan_pin
         self.frequency = frequency
@@ -16,7 +16,7 @@ class PWMController:
         self.resistor_pwm = GPIO.PWM(self.resistor_pin, self.frequency)
         self.fan_pwm = GPIO.PWM(self.fan_pin, self.frequency)
 
-    def start(self, resistor_duty_cycle=50, fan_duty_cycle=50):
+    def start(self, resistor_duty_cycle=0, fan_duty_cycle=100):
         self.resistor_pwm.start(resistor_duty_cycle)
         self.fan_pwm.start(fan_duty_cycle)
 
@@ -30,8 +30,6 @@ class PWMController:
 
     def change_fan_duty_cycle(self, duty_cycle):
         duty_cycle = abs(duty_cycle)
-        if duty_cycle < 40:
-            duty_cycle = 40
         self.fan_pwm.ChangeDutyCycle(duty_cycle)
 
     def apply_signal(self, signal):

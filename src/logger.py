@@ -5,7 +5,7 @@ import os
 
 class Logger:
     def __init__(self):
-        self.file_name = "log.csv"
+        self.file_name = "src/log.csv"
         if not os.path.isfile(self.file_name):
             with open(self.file_name, "w") as f:
                 f.write(

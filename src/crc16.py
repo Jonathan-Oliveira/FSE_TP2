@@ -268,5 +268,21 @@ def calculate_crc16(data):
 
 
 def check_crc16(buffer):
-    # return buffer[-2:] == calculate_crc16(buffer[:-2]).to_bytes(2, "little")
-    return buffer[7:9] == calculate_crc16(buffer[0:7]).to_bytes(2, "little")
+    valid_crc = calculate_crc16(buffer[:-2]).to_bytes(2, "little")
+    crc_received = buffer[-2:]
+    if crc_received != valid_crc:
+        raise InvalidCRC(valid_crc, crc_received)
+
+
+# Create a execption to handle the CRC error
+
+
+class InvalidCRC(Exception):
+    "Raised when the CRC is invalid"
+
+    def __init__(self, crc_valid, crc_received, message="CRC is invalid"):
+        self.crc_valid = crc_valid
+        self.crc_received = crc_received
+        super().__init__(
+            f"{message} - CRC válido {crc_valid} - CRC recebido {crc_received}"
+        )

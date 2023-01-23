@@ -1,9 +1,9 @@
 class PID:
     def __init__(
         self,
-        Kp=30.0,
-        Ki=0.2,
-        Kd=400.0,
+        Kp=20.0,
+        Ki=0.1,
+        Kd=100.0,
         T=1,
         control_signal_MAX=100.0,
         control_signal_MIN=-100.0,
@@ -48,7 +48,9 @@ class PID:
             control_signal = self.control_signal_MAX
         elif control_signal <= self.control_signal_MIN:
             control_signal = self.control_signal_MIN
+        if control_signal < 0 and control_signal > -40:
+            control_signal = -40
 
         self.previous_error = erro
 
-        return control_signal
+        return int(control_signal)

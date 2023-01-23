@@ -7,26 +7,23 @@ class BME:
         self.address = address
         self.port = port
         self.bus = smbus2.SMBus(port)
+        self.calibration_params = bme280.load_calibration_params(self.bus, self.address)
 
-    def get_reading(self):
-        self.calibration_params = bme280.load_calibration_params(
-            self.bus, self.address
-        )
-
-        data = bme280.sample(self.bus, self.address, self.calibration_params)
-        return data.temperature, data.humidity, data.pressure
+    def update_reading(self):
+        self.calibration_params = bme280.load_calibration_params(self.bus, self.address)
+        self.data = bme280.sample(self.bus, self.address, self.calibration_params)
 
     def get_temperature(self):
-        data = bme280.sample(self.bus, self.address, self.calibration_params)
-        return data.temperature
+        self.update_reading()
+        return self.data.temperature
 
     def get_humidity(self):
-        data = bme280.sample(self.bus, self.address, self.calibration_params)
-        return data.humidity
+        self.update_reading()
+        return self.data.humidity
 
     def get_pressure(self):
-        data = bme280.sample(self.bus, self.address, self.calibration_params)
-        return data.pressure
+        self.update_reading()
+        return self.data.pressure
 
     def close(self):
         self.bus.close()

@@ -1,5 +1,6 @@
 import serial
 from modbus import Modbus
+from time import sleep
 
 
 class Uart:
@@ -20,23 +21,17 @@ class Uart:
         self.check_connection()
         if self.is_conected:
             msg = self.modbus.code_message(message, value)
-            self.serial.write(msg)
+            if msg:
+                self.serial.write(msg)
 
     def receive(self):
         self.check_connection()
         if self.is_conected:
+            sleep(0.1)
             buffer = self.serial.read(9)
-            response = self.modbus.decode_message(buffer)
-            return response
-
-    def send_and_receive(self, message, value=None):
-        self.send(message, value)
-        response = self.receive()
-        count = 0
-        while not response and count < 3:
-            response = self.receive()
-            count += 1
-        return response
+            message, value = self.modbus.decode_message(buffer)
+            return message, value
+        return None, None
 
     def close(self):
         self.serial.close()

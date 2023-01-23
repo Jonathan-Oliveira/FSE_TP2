@@ -6,7 +6,7 @@ def load_csv():
     Load csv file and return a list of dictionaries
 
     example:
-    [{"time": 0, "temperature": 25}, {"time": 1, "temperature": 38}, ...}]
+    {0: 25,60: 38, 120: 46, 240:54, 260:57, 300:61, 360:63, 420:54, 480:33, 600:25 }
     """
     data = dict()
     # Open file in read mode
@@ -19,7 +19,7 @@ def load_csv():
         if not row:
             continue
         time = int(row[0].rstrip())
-        temperature = int(row[1].rstrip())
+        temperature = float(row[1].rstrip())
         data.update({time: temperature})
 
     return data
@@ -28,3 +28,4 @@ def load_csv():
 if __name__ == "__main__":
     data = load_csv()
     print(data)
+    print(data.get(0))
